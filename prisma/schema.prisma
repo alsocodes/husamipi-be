@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               Int       @id @unique @default(autoincrement())
+  username         String?   @unique
+  email            String    @unique
+  name             String
+  roleId           Int
+  refreshToken     String?
+  lastRefreshToken String?
+  createdBy        Int
+  updatedBy        Int?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime? @updatedAt
+  password         String?
+  isAdmin          Boolean   @default(false)
+  role             Role      @relation(fields: [roleId], references: [id])
+  forums           Forum[]
+  materi           Materi[]
+}
+
+model Role {
+  id        Int       @id @unique @default(autoincrement())
+  name      String    @unique
+  accesses  String[]
+  createdBy Int
+  updatedBy Int?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  users     User[]
+}
+
+enum AttachmentType {
+  image
+  pdf
+  video
+  doc
+  xls
+  ppt
+}
+
+model Materi {
+  id          Int       @id @unique @default(autoincrement())
+  title       String    @unique
+  description String    @db.Text()
+  isActive    Boolean   @default(true)
+  attachments Json[]
+  createdBy   Int
+  user        User      @relation(fields: [createdBy], references: [id])
+  updatedBy   Int?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+}
+
+enum ForumStatus {
+  pending
+  active
+  rejected
+}
+
+model Forum {
+  id          Int         @id @unique @default(autoincrement())
+  title       String      @unique
+  description String      @db.Text()
+  status      ForumStatus @default(active)
+  statusInfo  String?
+  parentId    Int?
+  parent      Forum?      @relation("parents", fields: [parentId], references: [id])
+  childs      Forum[]     @relation("parents")
+  createdBy   Int
+  user        User        @relation(fields: [createdBy], references: [id])
+  updatedBy   Int?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime?   @updatedAt
+}
