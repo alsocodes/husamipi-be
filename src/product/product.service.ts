@@ -34,6 +34,15 @@ export class ProductService {
 
     const { count, rows } = await this.prismaService.findAndCountAll({
       table: this.prismaService.product,
+      include: {
+        materis: {
+          select: {
+            id: true,
+            title: true,
+            user: { select: { id: true, name: true } },
+          },
+        },
+      },
       take: size,
       skip,
       orderBy: { [orderBy || 'id']: order || 'desc' },
@@ -51,6 +60,15 @@ export class ProductService {
   async findOne(id: number) {
     return await this.prismaService.product.findUnique({
       where: { id: Number(id) },
+      include: {
+        materis: {
+          select: {
+            id: true,
+            title: true,
+            user: { select: { id: true, name: true } },
+          },
+        },
+      },
     });
   }
 

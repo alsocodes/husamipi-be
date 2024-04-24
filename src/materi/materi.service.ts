@@ -37,7 +37,10 @@ export class MateriService {
 
     const { count, rows } = await this.prismaService.findAndCountAll({
       table: this.prismaService.materi,
-      include: { user: { select: { id: true, name: true } } },
+      include: {
+        product: { select: { id: true, name: true } },
+        user: { select: { id: true, name: true } },
+      },
       take: size,
       skip,
       orderBy: { [orderBy || 'id']: order || 'desc' },
@@ -55,13 +58,16 @@ export class MateriService {
   async findOne(id: number) {
     return await this.prismaService.materi.findUnique({
       where: { id: Number(id) },
-      include: { user: { select: { id: true, name: true } } },
+      include: {
+        product: { select: { id: true, name: true } },
+        user: { select: { id: true, name: true } },
+      },
     });
   }
 
   async create(
     userId: number,
-    { attachments, description, title }: CreateMateriDTO,
+    { attachments, description, title, productId }: CreateMateriDTO,
   ) {
     try {
       return await this.prismaService.materi.create({
@@ -69,6 +75,7 @@ export class MateriService {
           title,
           description,
           attachments,
+          productId,
           createdBy: Number(userId),
         },
       });
@@ -80,11 +87,11 @@ export class MateriService {
   async update(
     id: number,
     userId: number,
-    { title, description, attachments }: CreateMateriDTO,
+    { title, description, attachments, productId }: CreateMateriDTO,
   ) {
     try {
       return await this.prismaService.materi.update({
-        data: { title, description, attachments, updatedBy: userId },
+        data: { title, description, attachments, productId, updatedBy: userId },
         where: { id: Number(id) },
       });
     } catch (error) {

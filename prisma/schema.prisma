@@ -52,6 +52,8 @@ model Materi {
   description String    @db.Text()
   isActive    Boolean   @default(true)
   attachments Json[]
+  productId   Int?
+  product     Product?  @relation(fields: [productId], references: [id])
   createdBy   Int
   user        User      @relation(fields: [createdBy], references: [id])
   updatedBy   Int?
@@ -90,6 +92,7 @@ model Product {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime?    @updatedAt
   saleDetails SaleDetail[]
+  materis     Materi[]
 }
 
 model Sale {

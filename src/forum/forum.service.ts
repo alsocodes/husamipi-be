@@ -37,7 +37,10 @@ export class ForumService {
 
     const { count, rows } = await this.prismaService.findAndCountAll({
       table: this.prismaService.forum,
-      include: { user: { select: { id: true, name: true } }, childs: true },
+      include: {
+        user: { select: { id: true, name: true } },
+        childs: { include: { user: { select: { id: true, name: true } } } },
+      },
       take: size,
       skip,
       orderBy: { [orderBy || 'id']: order || 'desc' },
@@ -55,7 +58,10 @@ export class ForumService {
   async findOne(id: number) {
     return await this.prismaService.forum.findUnique({
       where: { id: Number(id) },
-      include: { user: { select: { id: true, name: true } }, childs: true },
+      include: {
+        user: { select: { id: true, name: true } },
+        childs: { include: { user: { select: { id: true, name: true } } } },
+      },
     });
   }
 

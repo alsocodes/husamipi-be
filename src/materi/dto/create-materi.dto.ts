@@ -9,4 +9,7 @@ export class CreateMateriDTO {
 
   @IsOptional()
   attachments?: any;
+
+  @IsOptional()
+  productId: number;
 }
