@@ -12,6 +12,8 @@ import { ForumModule } from './forum/forum.module';
 import { MateriModule } from './materi/materi.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { ProductModule } from './product/product.module';
+import { SaleModule } from './sale/salemodule';
 // import { MenuModule } from './menu/menu.module';
 // import { DivisionModule } from './division/division.module';
 // import { TicketModule } from './ticket/ticket.module';
@@ -36,6 +38,8 @@ import { join } from 'path';
     RoleModule,
     ForumModule,
     MateriModule,
+    ProductModule,
+    SaleModule,
     // MenuModule,
     // DivisionModule,
     // TicketModule,

@@ -80,3 +80,40 @@ model Forum {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime?   @updatedAt
 }
+
+model Product {
+  id          Int          @id @unique @default(autoincrement())
+  name        String       @unique
+  price       Float
+  createdBy   Int
+  updatedBy   Int?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime?    @updatedAt
+  saleDetails SaleDetail[]
+}
+
+model Sale {
+  id            Int          @id @unique @default(autoincrement())
+  date          DateTime
+  soNumber      String
+  invoiceNumber String
+  customer      String
+  total         Float?
+  createdBy     Int
+  updatedBy     Int?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime?    @updatedAt
+  saleDetails   SaleDetail[]
+}
+
+model SaleDetail {
+  id        Int     @id @unique @default(autoincrement())
+  saleId    Int
+  sale      Sale    @relation(fields: [saleId], references: [id])
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+  qty       Int
+  price     Float
+  ppn       Float?  @default(0)
+  total     Float
+}

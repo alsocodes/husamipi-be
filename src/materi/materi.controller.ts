@@ -91,7 +91,8 @@ export class MateriController {
       storage: diskStorage({
         destination: './storage/attachment/',
         filename(req, file, callback) {
-          callback(null, `${Date.now()}.png`);
+          const ext = file.originalname.split('.').slice(-1)[0];
+          callback(null, `${Date.now()}.${ext}`);
         },
       }),
     }),
@@ -111,9 +112,10 @@ export class MateriController {
     @Request() req: any,
   ) {
     try {
-      console.log(attachment);
+      // console.log(attachment);
       const apiUrl = process.env.API_URL || 'http://localhost:5005';
-      const filename = `liputan-internal-${Date.now()}.webp`;
+
+      // const filename = `attachment-${Date.now()}.webp`;
       // await sharp(`./storage/attachment/${attachment.filename}`)
       //   .webp({ quality: 60 })
       //   .toFile(`./storage/attachment/${filename}`);
@@ -124,7 +126,7 @@ export class MateriController {
         succes: true,
         message: 'File succesfully uploaded',
         data: {
-          link: `${apiUrl}/storage/attachment/${attachment.fieldname}`,
+          link: `${apiUrl}/storage/attachment/${attachment.filename}`,
           file: attachment.filename,
         },
       };
